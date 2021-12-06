@@ -1,15 +1,16 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Response } from 'express';
-import { ExpressRequest } from '../../types/types';
 import { verify } from 'jsonwebtoken';
-import { JWT_SECRET } from '../../config';
-import { UsersService } from '../users.service';
+import { JWT_SECRET } from '../../constants';
+import {ExpressRequest} from "../types";
+import {AuthService} from "../auth.service";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly authService: AuthService) {}
 
   async use(req: ExpressRequest, res: Response, next: NextFunction) {
+
     if (!req.headers.authorization) {
       req.user = null;
       next();
@@ -17,10 +18,9 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     const token = req.headers.authorization.split(' ')[1];
-
     try {
       const decode = verify(token, JWT_SECRET);
-      req.user = await this.usersService.findById(decode.id);
+      req.user = await this.authService.findById(decode.id);
       next();
     } catch (e) {
       req.user = null;

@@ -4,7 +4,7 @@ const ormConfig: ConnectionOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
-  username: 'postgres',
+  username: 'Vilena',
   password: 'root',
   database: 'screens',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
