@@ -10,7 +10,6 @@ import {
 import {hash} from 'bcrypt'
 import {EventEntity} from "../events/event.entity";
 import {ApiProperty} from "@nestjs/swagger";
-import {ScreenEntity} from "../screens/screen.entity";
 import {FileEntity} from "../files/file.entity";
 
 @Entity('users')
@@ -45,9 +44,6 @@ export class UserEntity {
 
   @OneToMany(() => EventEntity, event => event.user)
   events: EventEntity[]
-
-  @OneToMany(() => ScreenEntity, screen => screen.user)
-  screens: ScreenEntity[]
 
   @OneToMany(() => FileEntity, file => file.user)
   files: FileEntity[]

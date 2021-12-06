@@ -10,6 +10,7 @@ import {AuthGuard} from "../guards/auth.guard";
 @Module({
   controllers: [EventsController],
   providers: [EventsService, AuthGuard, UsersService],
-  imports: [TypeOrmModule.forFeature([EventEntity, UserEntity])]
+  imports: [TypeOrmModule.forFeature([EventEntity, UserEntity])],
+  exports: [EventsService]
 })
 export class EventsModule {}

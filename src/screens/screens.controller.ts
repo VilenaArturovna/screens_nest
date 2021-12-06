@@ -1,5 +1,5 @@
-import {Controller, UseGuards} from '@nestjs/common';
-import {Crud, CrudController} from "@nestjsx/crud";
+import {Body, Controller, Param, UseGuards} from '@nestjs/common';
+import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {ScreenEntity} from "./screen.entity";
 import {ScreensService} from "./screens.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
@@ -28,8 +28,13 @@ import {AuthGuard} from "../guards/auth.guard";
   },
 })
 @UseGuards(AuthGuard)
-@Controller('screens')
+@Controller(':eventId/screens')
 export class ScreensController implements CrudController<ScreenEntity>{
   constructor(public service: ScreensService) {
+  }
+
+  @Override('createOneBase')
+  async createScreen(@Param('eventId') eventId: string, @Body() create: CreateScreenDto,): Promise<ScreenEntity> {
+    return await this.service.createScreen(eventId, create)
   }
 }
