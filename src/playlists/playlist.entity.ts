@@ -20,7 +20,7 @@ export class PlaylistEntity {
 
   @Column()
   @ApiProperty()
-  duration: string
+  duration: number
 
   @CreateDateColumn({ type: 'timestamp' })
   @ApiProperty()
