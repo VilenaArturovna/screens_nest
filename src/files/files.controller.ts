@@ -1,10 +1,11 @@
-import { Controller } from '@nestjs/common';
-import {Crud, CrudController} from "@nestjsx/crud";
+import {Body, Controller, UseGuards} from '@nestjs/common';
+import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {FileEntity} from "./file.entity";
 import {FilesService} from "./files.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {AddFileDto} from "./dto/addFile.dto";
 import {UpdateFileDto} from "./dto/updateFile.dto";
+import {OwnerFilesGuard} from "./guards/ownerFiles.guard";
 
 @ApiTags('files')
 @ApiBearerAuth()
@@ -13,11 +14,19 @@ import {UpdateFileDto} from "./dto/updateFile.dto";
     type: FileEntity
   },
   dto: {
-    create: AddFileDto,
     update: UpdateFileDto,
   },
   routes: {
-    only: ['getManyBase', 'getOneBase', 'updateOneBase', 'deleteOneBase', 'createOneBase',],
+    updateOneBase: {
+      decorators: [UseGuards(OwnerFilesGuard)]
+    },
+    getOneBase: {
+      decorators: [UseGuards(OwnerFilesGuard)]
+    },
+    deleteOneBase: {
+      decorators: [UseGuards(OwnerFilesGuard)]
+    },
+    exclude: ['createManyBase', 'recoverOneBase', "replaceOneBase"]
   },
   params: {
     id: {
@@ -30,5 +39,10 @@ import {UpdateFileDto} from "./dto/updateFile.dto";
 @Controller('files')
 export class FilesController implements CrudController<FileEntity>{
   constructor(public service: FilesService) {
+  }
+
+  @Override('createOneBase')
+  async addFile(@Body() addFileDto: AddFileDto): Promise<FileEntity> {
+    return await this.service.addFile(addFileDto)
   }
 }
