@@ -10,4 +10,9 @@ export class CreateScreenDto {
   @IsNumber()
   @ApiPropertyOptional()
   readonly releaseYear: number
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  readonly eventId: string
 }

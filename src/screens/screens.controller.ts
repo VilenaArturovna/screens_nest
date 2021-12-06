@@ -1,10 +1,11 @@
-import {Body, Controller, Param, UseGuards} from '@nestjs/common';
+import {Body, Controller, Query, UseGuards} from '@nestjs/common';
 import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {ScreenEntity} from "./screen.entity";
 import {ScreensService} from "./screens.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {CreateScreenDto} from "./dto/createScreen.dto";
 import {AuthGuard} from "../guards/auth.guard";
+import {OwnerScreenGuard} from "./guards/ownerScreen.guard";
 
 @ApiTags('screens')
 @ApiBearerAuth()
@@ -13,11 +14,19 @@ import {AuthGuard} from "../guards/auth.guard";
     type: ScreenEntity
   },
   dto: {
-    create: CreateScreenDto,
     update: CreateScreenDto,
   },
   routes: {
-    only: ['getManyBase', 'getOneBase', 'updateOneBase', 'deleteOneBase', 'createOneBase'],
+    updateOneBase: {
+      decorators: [UseGuards(OwnerScreenGuard)]
+    },
+    getOneBase: {
+      decorators: [UseGuards(OwnerScreenGuard)]
+    },
+    deleteOneBase: {
+      decorators: [UseGuards(OwnerScreenGuard)]
+    },
+    exclude: ['createManyBase', 'recoverOneBase', "replaceOneBase"]
   },
   params: {
     id: {
@@ -28,13 +37,18 @@ import {AuthGuard} from "../guards/auth.guard";
   },
 })
 @UseGuards(AuthGuard)
-@Controller(':eventId/screens')
+@Controller('screens')
 export class ScreensController implements CrudController<ScreenEntity>{
   constructor(public service: ScreensService) {
   }
 
+  @Override('getManyBase')
+  async findAll(@Query() query: any): Promise<ScreenEntity[]>  {
+    return await this.service.findAll(query)
+  }
+
   @Override('createOneBase')
-  async createScreen(@Param('eventId') eventId: string, @Body() create: CreateScreenDto,): Promise<ScreenEntity> {
-    return await this.service.createScreen(eventId, create)
+  async createScreen(@Body() create: CreateScreenDto): Promise<ScreenEntity> {
+    return await this.service.createScreen(create)
   }
 }
