@@ -13,7 +13,11 @@ export class EventsService extends TypeOrmCrudService<EventEntity>{
     super(repo);
   }
 
-  async createEvent(create: CreateEventDto, userId: string) {
+  async findAll(userId: string): Promise<EventEntity[]> {
+    return await this.repo.find({relations: ['user'], where: {user: {id: userId}}} )
+  }
+
+  async createEvent(create: CreateEventDto, userId: string): Promise<EventEntity> {
     const event = new EventEntity()
     Object.assign(event, create)
     event.user = await this.userRepo.findOne(userId)

@@ -15,14 +15,19 @@ import {AuthGuard} from "../guards/auth.guard";
     type: EventEntity
   },
   dto: {
-    create: CreateEventDto,
     update: CreateEventDto,
   },
   routes: {
-    //only: ['getManyBase', 'getOneBase', 'updateOneBase', 'deleteOneBase', 'createOneBase'],
     updateOneBase: {
       decorators: [UseGuards(OwnerEventGuard)]
-    }
+    },
+    getOneBase: {
+      decorators: [UseGuards(OwnerEventGuard)]
+    },
+    deleteOneBase: {
+      decorators: [UseGuards(OwnerEventGuard)]
+    },
+    exclude: ['createManyBase', 'recoverOneBase', "replaceOneBase"]
   },
   params: {
     id: {
@@ -38,8 +43,13 @@ export class EventsController implements CrudController<EventEntity>{
   constructor(public service: EventsService) {
   }
 
+  @Override('getManyBase')
+  async findAll(@User('id') userId: string) {
+    return await this.service.findAll(userId)
+  }
+
   @Override('createOneBase')
-  async createEvent(@Body() create: CreateEventDto, @User('id') userId: string) {
+  async createEvent(@Body() create: CreateEventDto, @User('id') userId: string): Promise<EventEntity> {
     return await this.service.createEvent(create, userId)
   }
 }
