@@ -15,13 +15,17 @@ export class ScreensService extends TypeOrmCrudService<ScreenEntity>{
   }
 
   async findAll(query: any): Promise<ScreenEntity[]> {
-    return await this.repo.find({relations: ['event'], where: {event: {id: query.eventId}}})
+    const screens = query.eventId
+      ? await this.repo.find({relations: ['event'], where: {event: {id: query.eventId}}})
+      : await this.repo.find()
+    return screens
   }
 
   async createScreen(create: CreateScreenDto,): Promise<ScreenEntity> {
     const screen = new ScreenEntity()
-    Object.assign(screen, create)
     screen.event = await this.eventRepo.findOne(create.eventId)
-    return screen
+    delete create.eventId
+    Object.assign(screen, create)
+    return await this.repo.save(screen)
   }
 }

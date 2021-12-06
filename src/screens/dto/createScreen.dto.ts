@@ -14,5 +14,5 @@ export class CreateScreenDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  readonly eventId: string
+  eventId: string
 }
