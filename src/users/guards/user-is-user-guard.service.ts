@@ -2,14 +2,13 @@ import {CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable} fr
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class OwnerGuard implements CanActivate {
+export class UserIsUserGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log('request', request)
-    console.log('owner', request.user)
-    if (request.params.userId == request.user.id) {
+
+    if (request.params.id == request.user.id) {
       return true
     }
 

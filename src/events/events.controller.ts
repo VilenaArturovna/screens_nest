@@ -4,9 +4,9 @@ import {EventEntity} from "./event.entity";
 import {EventsService} from "./events.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {CreateEventDto} from "./dto/createEvent.dto";
-import {AuthGuard, OwnerGuard} from "../guards";
 import {OwnerEventGuard} from "./guards/ownerEvent.guard";
 import {User} from "../decorators/user.decorator";
+import {AuthGuard} from "../guards/auth.guard";
 
 @ApiTags('events')
 @ApiBearerAuth()

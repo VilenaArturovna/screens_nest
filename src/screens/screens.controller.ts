@@ -4,7 +4,7 @@ import {ScreenEntity} from "./screen.entity";
 import {ScreensService} from "./screens.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {CreateScreenDto} from "./dto/createScreen.dto";
-import {AuthGuard, OwnerGuard} from "../guards";
+import {AuthGuard} from "../guards/auth.guard";
 
 @ApiTags('screens')
 @ApiBearerAuth()
@@ -27,7 +27,7 @@ import {AuthGuard, OwnerGuard} from "../guards";
     },
   },
 })
-@UseGuards(AuthGuard, OwnerGuard)
+@UseGuards(AuthGuard)
 @Controller('screens')
 export class ScreensController implements CrudController<ScreenEntity>{
   constructor(public service: ScreensService) {
