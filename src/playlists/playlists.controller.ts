@@ -1,4 +1,4 @@
-import {Body, Controller, Param, UseGuards} from '@nestjs/common';
+import {Body, Controller, Param, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {PlaylistEntity} from "./playlist.entity";
 import {PlaylistsService} from "./playlists.service";
@@ -9,6 +9,7 @@ import {OwnerPlaylistGuard} from "./guards/ownerPlaylist.guard";
 
 @ApiTags('playlists')
 @ApiBearerAuth()
+@UsePipes(new ValidationPipe())
 @UseGuards(AuthGuard, OwnerPlaylistGuard)
 @Crud({
   model: {

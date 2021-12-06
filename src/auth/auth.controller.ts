@@ -3,9 +3,9 @@ import {AuthService} from "./auth.service";
 import {ApiBody, ApiCreatedResponse, ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {AuthUserResponse} from "./types";
 import {AuthUserDto, CreateUserDto} from "./dto";
-import {UserEntity} from "../users/user.entity";
 
 @ApiTags('auth')
+@UsePipes(new ValidationPipe())
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

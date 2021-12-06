@@ -1,4 +1,4 @@
-import {Body, Controller, UseGuards} from '@nestjs/common';
+import {Body, Controller, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {EventEntity} from "./event.entity";
 import {EventsService} from "./events.service";
@@ -10,6 +10,7 @@ import {AuthGuard} from "../guards/auth.guard";
 
 @ApiTags('events')
 @ApiBearerAuth()
+@UsePipes(new ValidationPipe())
 @Crud({
   model: {
     type: EventEntity

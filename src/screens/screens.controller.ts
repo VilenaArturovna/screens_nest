@@ -1,4 +1,4 @@
-import {Body, Controller, Query, UseGuards} from '@nestjs/common';
+import {Body, Controller, Query, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {ScreenEntity} from "./screen.entity";
 import {ScreensService} from "./screens.service";
@@ -9,6 +9,7 @@ import {OwnerScreenGuard} from "./guards/ownerScreen.guard";
 
 @ApiTags('screens')
 @ApiBearerAuth()
+@UsePipes(new ValidationPipe())
 @Crud({
   model: {
     type: ScreenEntity

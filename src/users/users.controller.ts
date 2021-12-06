@@ -1,4 +1,4 @@
-import {Controller, UseGuards} from '@nestjs/common';
+import {Controller, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import {Crud, CrudController} from "@nestjsx/crud";
 import {UserEntity} from "./user.entity";
 import {UsersService} from "./users.service";
@@ -9,6 +9,7 @@ import {UserIsUserGuard} from "./guards/user-is-user-guard.service";
 
 @ApiTags('users')
 @ApiBearerAuth()
+@UsePipes(new ValidationPipe())
 @Crud({
   model: {
     type: UserEntity

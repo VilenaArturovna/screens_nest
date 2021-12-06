@@ -1,4 +1,4 @@
-import {Body, Controller, UseGuards} from '@nestjs/common';
+import {Body, Controller, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {FileEntity} from "./file.entity";
 import {FilesService} from "./files.service";
@@ -10,6 +10,7 @@ import {User} from "../decorators/user.decorator";
 
 @ApiTags('files')
 @ApiBearerAuth()
+@UsePipes(new ValidationPipe())
 @Crud({
   model: {
     type: FileEntity
