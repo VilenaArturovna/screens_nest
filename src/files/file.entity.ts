@@ -24,7 +24,7 @@ export class FileEntity {
 
   @Column()
   @ApiProperty()
-  duration: string
+  duration: number
 
   @Column()
   @ApiProperty()

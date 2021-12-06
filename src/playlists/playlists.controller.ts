@@ -1,5 +1,5 @@
-import {Controller, UseGuards} from '@nestjs/common';
-import {Crud, CrudController} from "@nestjsx/crud";
+import {Body, Controller, Param, UseGuards} from '@nestjs/common';
+import {Crud, CrudController, Override} from "@nestjsx/crud";
 import {PlaylistEntity} from "./playlist.entity";
 import {PlaylistsService} from "./playlists.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
@@ -13,9 +13,6 @@ import {OwnerPlaylistGuard} from "./guards/ownerPlaylist.guard";
 @Crud({
   model: {
     type: PlaylistEntity,
-  },
-  dto: {
-    update: UpdatePlaylistDto,
   },
   routes: {
     only: ['getOneBase', 'updateOneBase'],
@@ -31,5 +28,10 @@ import {OwnerPlaylistGuard} from "./guards/ownerPlaylist.guard";
 @Controller('playlists')
 export class PlaylistsController implements CrudController<PlaylistEntity>{
   constructor(public service: PlaylistsService) {
+  }
+
+  @Override('updateOneBase')
+  async updatePlaylist(@Param('id') id: string, @Body() updateDto: UpdatePlaylistDto): Promise<PlaylistEntity> {
+    return this.service.updatePlaylist(id, updateDto)
   }
 }
