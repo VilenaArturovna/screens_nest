@@ -1,12 +1,15 @@
-import { Controller } from '@nestjs/common';
+import {Controller, UseGuards} from '@nestjs/common';
 import {Crud, CrudController} from "@nestjsx/crud";
 import {PlaylistEntity} from "./playlist.entity";
 import {PlaylistsService} from "./playlists.service";
 import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {UpdatePlaylistDto} from "./dto/updatePlaylist.dto";
+import {AuthGuard} from "../guards/auth.guard";
+import {OwnerPlaylistGuard} from "./guards/ownerPlaylist.guard";
 
 @ApiTags('playlists')
 @ApiBearerAuth()
+@UseGuards(AuthGuard, OwnerPlaylistGuard)
 @Crud({
   model: {
     type: PlaylistEntity,
