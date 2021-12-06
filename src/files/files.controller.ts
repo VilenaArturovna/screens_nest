@@ -6,6 +6,7 @@ import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 import {AddFileDto} from "./dto/addFile.dto";
 import {UpdateFileDto} from "./dto/updateFile.dto";
 import {OwnerFilesGuard} from "./guards/ownerFiles.guard";
+import {User} from "../decorators/user.decorator";
 
 @ApiTags('files')
 @ApiBearerAuth()
@@ -41,8 +42,13 @@ export class FilesController implements CrudController<FileEntity>{
   constructor(public service: FilesService) {
   }
 
+  @Override('getManyBase')
+  async findAll(@User('id') userId: string) {
+    return await this.service.findAll(userId)
+  }
+
   @Override('createOneBase')
-  async addFile(@Body() addFileDto: AddFileDto): Promise<FileEntity> {
-    return await this.service.addFile(addFileDto)
+  async addFile(@Body() addFileDto: AddFileDto, @User('id') userId: string): Promise<FileEntity> {
+    return await this.service.addFile(addFileDto, userId)
   }
 }
